@@ -7,8 +7,8 @@
     <!-- Menu For Mobile Device -->
     <div class="mobile-nav">
         <a href="index.html" class="logo">
-            <img src="{{ asset($setting->logo) }}" class="logo-one" alt="Logo" style="max-width: 150px; height: auto;">
-            <img src="{{ asset($setting->logo) }}" class="logo-two" alt="Logo" style="max-width: 150px; height: auto;">
+            <img src="{{ asset($setting->logo) }}" class="logo-one" alt="Hotel" style="max-width: 150px; max-height: 60px; width: auto; height: auto; object-fit: contain;">
+            <img src="{{ asset($setting->logo) }}" class="logo-two" alt="Hotel" style="max-width: 150px; max-height: 60px; width: auto; height: auto; object-fit: contain;">
         </a>
     </div>
 
@@ -17,8 +17,8 @@
         <div class="container">
             <nav class="navbar navbar-expand-md navbar-light ">
                 <a class="navbar-brand" href="index.html">
-                    <img src="{{ asset($setting->logo) }}" class="logo-one" alt="Logo" style="max-width: 150px; height: auto;">
-                    <img src="{{ asset($setting->logo) }}" class="logo-two" alt="Logo" style="max-width: 150px; height: auto;">
+                    <img src="{{ asset($setting->logo) }}" class="logo-one" alt="Hotel" style="max-width: 150px; max-height: 60px; width: auto; height: auto; object-fit: contain;">
+                    <img src="{{ asset($setting->logo) }}" class="logo-two" alt="Hotel" style="max-width: 150px; max-height: 60px; width: auto; height: auto; object-fit: contain;">
                 </a>
 
                 <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">

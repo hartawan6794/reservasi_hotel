@@ -10,7 +10,7 @@
                     <div class="footer-widget">
                         <div class="footer-logo">
                             <a href="index.html">
-                                <img src="{{ asset($setting->logo) }}" alt="Images" style="max-width: 180px; height: auto;">
+                                <img src="{{ asset($setting->logo) }}" alt="Hotel" style="max-width: 180px; max-height: 80px; width: auto; height: auto; object-fit: contain;">
                             </a>
                         </div>
                         <p>

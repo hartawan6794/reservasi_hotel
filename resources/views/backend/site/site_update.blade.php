@@ -94,7 +94,26 @@
                         <input type="file" name="logo" class="form-control"    />
 
 
-                         <img src="{{ asset($site->logo) }}" alt="" style="width: 100px; height:100px;">
+                         <img src="{{ asset($site->logo) }}" alt="" style="max-width: 150px; max-height: 60px; width: auto; height: auto; object-fit: contain;">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0"> Favicon </h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <input type="file" name="favicon" class="form-control" accept="image/png,image/x-icon,.ico" />
+                        <small class="text-muted">Format: PNG atau ICO, Max: 1MB, Recommended: 32x32px atau 16x16px</small>
+                        @if($site->favicon)
+                            <div class="mt-2">
+                                <img src="{{ asset($site->favicon) }}" alt="Favicon" style="max-width: 32px; max-height: 32px; width: auto; height: auto;">
+                            </div>
+                        @else
+                            <div class="mt-2">
+                                <small class="text-muted">No favicon uploaded. Default favicon will be used.</small>
+                            </div>
+                        @endif
                     </div>
                 </div>
                

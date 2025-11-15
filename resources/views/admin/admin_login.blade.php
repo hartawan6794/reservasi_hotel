@@ -6,7 +6,14 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--favicon-->
-	<link rel="icon" href="{{asset('backend/assets/images/favicon-32x32.png')}}" type="image/png" />
+	@php
+	    $setting = App\Models\SiteSetting::find(1);
+	@endphp
+	@if($setting && $setting->favicon)
+	    <link rel="icon" href="{{ asset($setting->favicon) }}" type="image/png">
+	@else
+	    <link rel="icon" href="{{asset('backend/assets/images/favicon-32x32.png')}}" type="image/png" />
+	@endif
 	<!--plugins-->
 	<link href="{{asset('backend/assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
 	<link href="{{asset('backend/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css')}}" rel="stylesheet" />
@@ -20,7 +27,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 	<link href="{{asset('backend/assets/css/app.css')}}" rel="stylesheet">
 	<link href="{{asset('backend/assets/css/icons.css')}}" rel="stylesheet">
-	<title>Admin Login Page </title>
+	<title>Hotel - Admin Login</title>
 </head>
 
 <body class="">

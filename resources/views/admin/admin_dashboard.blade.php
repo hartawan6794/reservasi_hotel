@@ -10,7 +10,14 @@
 
 	
 	<!--favicon-->
-	<link rel="icon" href="{{asset('backend/assets/images/favicon-32x32.png')}}" type="image/png"/>
+	@php
+	    $setting = App\Models\SiteSetting::find(1);
+	@endphp
+	@if($setting && $setting->favicon)
+	    <link rel="icon" href="{{ asset($setting->favicon) }}" type="image/png">
+	@else
+	    <link rel="icon" href="{{asset('backend/assets/images/favicon-32x32.png')}}" type="image/png"/>
+	@endif
 	<!--plugins--> 
 	<link href="{{asset('backend/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet"/>
 	<link href="{{asset('backend/assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
@@ -37,7 +44,7 @@
    <link href="{{asset('backend/assets/plugins/datatable/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" />	
    <!-- dataTables CSS --> 
 
-	<title>Admin Dashboard </title>
+	<title>Hotel - Admin Dashboard</title>
 </head>
 
 <body>

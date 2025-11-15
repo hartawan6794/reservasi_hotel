@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Invoice #{{ $editData->code }}</title>
+    <title>Hotel - Invoice #{{ $editData->code }}</title>
     <style>
         * {
             margin: 0;

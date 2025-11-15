@@ -21,6 +21,7 @@ class SettingController extends Controller
         if (!$site) {
             $site = SiteSetting::create([
                 'logo' => null,
+                'favicon' => null,
                 'phone' => null,
                 'address' => null,
                 'email' => null,
@@ -47,6 +48,7 @@ class SettingController extends Controller
             'twitter' => 'nullable|string|max:255',
             'copyright' => 'nullable|string|max:255',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'favicon' => 'nullable|image|mimes:png,ico|max:1024',
         ]);
 
         $site = SiteSetting::findOrFail($request->id);
@@ -62,6 +64,19 @@ class SettingController extends Controller
             $image->move(public_path('upload/logo'), $name_gen);
             
             $site->logo = 'upload/logo/' . $name_gen;
+        }
+
+        if ($request->hasFile('favicon')) {
+            // Delete old favicon
+            if ($site->favicon && File::exists(public_path($site->favicon))) {
+                File::delete(public_path($site->favicon));
+            }
+
+            $favicon = $request->file('favicon');
+            $name_gen = hexdec(uniqid()) . '.' . $favicon->getClientOriginalExtension();
+            $favicon->move(public_path('upload/favicon'), $name_gen);
+            
+            $site->favicon = 'upload/favicon/' . $name_gen;
         }
 
         $site->phone = $request->phone;

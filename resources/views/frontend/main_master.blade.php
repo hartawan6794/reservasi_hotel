@@ -32,7 +32,14 @@
         <link rel="stylesheet" href="{{ asset('frontend/assets/css/theme-dark.css') }}">
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="{{ asset('frontend/assets/img/favicon.png') }}">
+        @php
+            $setting = App\Models\SiteSetting::find(1);
+        @endphp
+        @if($setting && $setting->favicon)
+            <link rel="icon" type="image/png" href="{{ asset($setting->favicon) }}">
+        @else
+            <link rel="icon" type="image/png" href="{{ asset('frontend/assets/img/favicon.png') }}">
+        @endif
 
         <!-- CKEditor Content Styles -->
         <style>
@@ -211,7 +218,7 @@
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
     <!-- toastr CSS -->
 
-        <title>Easy Hotel </title>
+        <title>Hotel</title>
     </head>
     <body>
 
