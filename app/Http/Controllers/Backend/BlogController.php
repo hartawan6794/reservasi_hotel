@@ -228,7 +228,7 @@ class BlogController extends Controller
     {
         $blog = BlogPost::with('blog', 'user')->latest()->paginate(3);
         $bcategory = BlogCategory::latest()->get();
-        $lpost = BlogPost::with('blog')->latest()->limit(5)->get();
+        $lpost = BlogPost::with('blog', 'user')->latest()->limit(5)->get();
         return view('frontend.blog.blog_all', compact('blog', 'bcategory', 'lpost'));
     }
 
@@ -239,7 +239,7 @@ class BlogController extends Controller
     {
         $blog = BlogPost::with('blog', 'user')->where('post_slug', $slug)->firstOrFail();
         $bcategory = BlogCategory::latest()->get();
-        $lpost = BlogPost::with('blog')->latest()->limit(5)->get();
+        $lpost = BlogPost::with('blog', 'user')->latest()->limit(5)->get();
         return view('frontend.blog.blog_details', compact('blog', 'bcategory', 'lpost'));
     }
 
@@ -251,7 +251,7 @@ class BlogController extends Controller
         $blog = BlogPost::with('blog', 'user')->where('blogcat_id', $id)->latest()->get();
         $namecat = BlogCategory::findOrFail($id);
         $bcategory = BlogCategory::latest()->get();
-        $lpost = BlogPost::with('blog')->latest()->limit(5)->get();
+        $lpost = BlogPost::with('blog', 'user')->latest()->limit(5)->get();
         return view('frontend.blog.blog_cat_list', compact('blog', 'namecat', 'bcategory', 'lpost'));
     }
 }

@@ -194,6 +194,14 @@ Route::controller(CommentController::class)->group(function(){
  
 });
 
+/// Room Review All Route 
+Route::controller(\App\Http\Controllers\Backend\RoomReviewController::class)->group(function(){ 
+    Route::get('/all/review/', 'AllReview')->name('all.review');
+    Route::post('/update/review/status', 'UpdateReviewStatus')->name('update.review.status');
+    Route::get('/delete/review/{id}', 'DeleteReview')->name('delete.review');  
+ 
+});
+
 
 
 
@@ -304,6 +312,11 @@ Route::controller(AdminController::class)->group(function(){
 
     Route::get('/check_room_availability/', 'CheckRoomAvailability')->name('check_room_availability');
  
+});
+
+/// Room Review Route
+Route::controller(\App\Http\Controllers\Frontend\RoomReviewController::class)->group(function(){
+    Route::post('/room/review/store', 'StoreReview')->name('room.review.store');
 });
 
 

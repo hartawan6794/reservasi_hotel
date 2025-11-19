@@ -98,6 +98,12 @@
                             <h3 class="title">Recent Posts</h3>
                             <div class="widget-popular-post">
                                 @foreach ($lpost as $post)   
+                            @php
+                                $commentCount = App\Models\Comment::where('post_id', $post->id)
+                                    ->where('status', '1')
+                                    ->count();
+                                $commentDisplay = $commentCount >= 1000 ? number_format($commentCount / 1000, 1) . 'K' : $commentCount;
+                            @endphp
                             <article class="item">
                                 <a href="blog-details.html" class="thumb">
                 <img src="{{ asset($post->post_image) }}" alt="Images" style="width: 80px; height:80px;">      
@@ -111,11 +117,11 @@
                                     <ul>
                                         <li>
                                             <i class='bx bx-user'></i>
-                                            29K
+                                            {{ $post->user->name ?? 'Admin' }}
                                         </li>
                                         <li>
                                             <i class='bx bx-message-square-detail'></i>
-                                            15K
+                                            {{ $commentDisplay }}
                                         </li>
                                     </ul>
                                 </div>

@@ -33,7 +33,17 @@ class FrontendRoomController extends Controller
         $facility = Facility::where('rooms_id', $id)->get();
         $otherRooms = Room::where('id', '!=', $id)->with('type', 'facilities', 'multi_images')->get();
         
-        return view('frontend.room.room_details', compact('roomdetails', 'multiImage', 'facility', 'otherRooms'));
+        // Get approved reviews with average rating
+        $reviews = \App\Models\RoomReview::where('room_id', $id)
+            ->where('status', 1)
+            ->with('user')
+            ->latest()
+            ->get();
+        
+        $averageRating = $reviews->avg('rating') ?? 0;
+        $totalReviews = $reviews->count();
+        
+        return view('frontend.room.room_details', compact('roomdetails', 'multiImage', 'facility', 'otherRooms', 'reviews', 'averageRating', 'totalReviews'));
     }
 
     /**
@@ -87,13 +97,23 @@ class FrontendRoomController extends Controller
         $facility = Facility::where('rooms_id', $id)->get();
         $otherRooms = Room::where('id', '!=', $id)->with('type', 'facilities', 'multi_images')->get();
         
+        // Get approved reviews with average rating
+        $reviews = \App\Models\RoomReview::where('room_id', $id)
+            ->where('status', 1)
+            ->with('user')
+            ->latest()
+            ->get();
+        
+        $averageRating = $reviews->avg('rating') ?? 0;
+        $totalReviews = $reviews->count();
+        
         // Get check_in, check_out, persion from query string
         $check_in = $request->get('check_in');
         $check_out = $request->get('check_out');
         $persion = $request->get('persion');
         $room_id = $id;
 
-        return view('frontend.room.search_room_details', compact('roomdetails', 'multiImage', 'facility', 'otherRooms', 'check_in', 'check_out', 'persion', 'room_id'));
+        return view('frontend.room.search_room_details', compact('roomdetails', 'multiImage', 'facility', 'otherRooms', 'reviews', 'averageRating', 'totalReviews', 'check_in', 'check_out', 'persion', 'room_id'));
     }
 
     /**
