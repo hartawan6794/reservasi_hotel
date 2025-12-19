@@ -32,17 +32,17 @@ class FrontendRoomController extends Controller
         $multiImage = MultiImage::where('rooms_id', $id)->get();
         $facility = Facility::where('rooms_id', $id)->get();
         $otherRooms = Room::where('id', '!=', $id)->with('type', 'facilities', 'multi_images')->get();
-        
+
         // Get approved reviews with average rating
         $reviews = \App\Models\RoomReview::where('room_id', $id)
             ->where('status', 1)
             ->with('user')
             ->latest()
             ->get();
-        
+
         $averageRating = $reviews->avg('rating') ?? 0;
         $totalReviews = $reviews->count();
-        
+
         return view('frontend.room.room_details', compact('roomdetails', 'multiImage', 'facility', 'otherRooms', 'reviews', 'averageRating', 'totalReviews'));
     }
 
@@ -65,24 +65,26 @@ class FrontendRoomController extends Controller
 
         // Get all active rooms with active room numbers count
         $rooms = Room::with('type')
-            ->withCount(['room_numbers' => function($query) {
-                $query->where('status', 'Active');
-            }])
+            ->withCount([
+                'room_numbers' => function ($query) {
+                    $query->where('status', 'Active');
+                }
+            ])
             ->where('status', 1)
             ->get();
 
         // Get booking IDs that overlap with the date range
-        $check_date_booking_ids = Booking::where(function($query) use ($check_in, $check_out) {
+        $check_date_booking_ids = Booking::where(function ($query) use ($check_in, $check_out) {
             $query->whereBetween('check_in', [$check_in, $check_out])
-                  ->orWhereBetween('check_out', [$check_in, $check_out])
-                  ->orWhere(function($q) use ($check_in, $check_out) {
-                      $q->where('check_in', '<=', $check_in)
+                ->orWhereBetween('check_out', [$check_in, $check_out])
+                ->orWhere(function ($q) use ($check_in, $check_out) {
+                    $q->where('check_in', '<=', $check_in)
                         ->where('check_out', '>=', $check_out);
-                  });
+                });
         })
-        ->where('status', '!=', 0) // Exclude cancelled bookings
-        ->pluck('id')
-        ->toArray();
+            ->where('status', '!=', 0) // Exclude cancelled bookings
+            ->pluck('id')
+            ->toArray();
 
         return view('frontend.room.search_room', compact('rooms', 'check_date_booking_ids', 'check_in', 'check_out', 'persion'));
     }
@@ -96,17 +98,17 @@ class FrontendRoomController extends Controller
         $multiImage = MultiImage::where('rooms_id', $id)->get();
         $facility = Facility::where('rooms_id', $id)->get();
         $otherRooms = Room::where('id', '!=', $id)->with('type', 'facilities', 'multi_images')->get();
-        
+
         // Get approved reviews with average rating
         $reviews = \App\Models\RoomReview::where('room_id', $id)
             ->where('status', 1)
             ->with('user')
             ->latest()
             ->get();
-        
+
         $averageRating = $reviews->avg('rating') ?? 0;
         $totalReviews = $reviews->count();
-        
+
         // Get check_in, check_out, persion from query string
         $check_in = $request->get('check_in');
         $check_out = $request->get('check_out');
@@ -144,10 +146,10 @@ class FrontendRoomController extends Controller
             ->join('bookings', 'booking_room_lists.booking_id', '=', 'bookings.id')
             ->where('booking_room_lists.room_id', $room_id)
             ->where('bookings.status', '!=', 0) // Exclude cancelled bookings
-            ->where(function($query) use ($check_in, $check_out) {
+            ->where(function ($query) use ($check_in, $check_out) {
                 // Proper date overlap logic: bookings overlap if check_in < new_check_out AND check_out > new_check_in
                 $query->where('bookings.check_in', '<', $check_out)
-                      ->where('bookings.check_out', '>', $check_in);
+                    ->where('bookings.check_out', '>', $check_in);
             })
             ->distinct()
             ->pluck('booking_room_lists.room_number_id')
@@ -167,4 +169,6 @@ class FrontendRoomController extends Controller
             'total_nights' => $total_nights,
         ]);
     }
+
+
 }
