@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\RoomApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,44 +15,32 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
 
-    // Store room review
-    Route::post('/v1/rooms/review', [RoomApiController::class, 'storeRoomReview']);
+    // User Profile Routes
+    Route::get('/v1/user/profile', 'App\Http\Controllers\Api\ApiUserController@getUserProfile');
+    Route::post('/v1/user/profile/update', 'App\Http\Controllers\Api\ApiUserController@updateUserProfile');
+    Route::post('/v1/user/password/update', 'App\Http\Controllers\Api\ApiUserController@changePassword');
+
+    // User Booking Routes
+    Route::get('/v1/user/bookings', 'App\Http\Controllers\Api\ApiUserController@getUserBookings');
+    Route::post('/v1/user/booking/update/{id}', 'App\Http\Controllers\Api\ApiUserController@updateBooking');
+
+    // Authentication Routes (Protected)
+    Route::post('/v1/logout', 'App\Http\Controllers\Api\ApiAuthController@logout');
+
+    // Other Protected Routes
+    Route::post('/v1/rooms/review', 'App\Http\Controllers\Api\RoomApiController@storeRoomReview');
 });
 
+// Public Auth Routes
+Route::post('/v1/login', 'App\Http\Controllers\Api\ApiAuthController@login');
+Route::post('/v1/register', 'App\Http\Controllers\Api\ApiAuthController@register');
 
-/*
-|--------------------------------------------------------------------------
-| Room API Routes (v1)
-|--------------------------------------------------------------------------
-|
-| Public API endpoints for room management
-| Base URL: /api/v1/rooms
-|
-*/
-Route::prefix('v1')->group(function () {
-
-    Route::prefix('rooms')->group(function () {
-
-        // Get all rooms
-        Route::get('/', [RoomApiController::class, 'getAllRooms']);
-
-        // Get room details
-        Route::get('/{id}', [RoomApiController::class, 'getRoomDetails']);
-
-        // Search available rooms
-        Route::get('/search/available', [RoomApiController::class, 'searchRooms']);
-
-        // Get search room details with availability
-        Route::get('/search/details/{id}', [RoomApiController::class, 'getSearchRoomDetails']);
-
-        // Check room availability
-        Route::get('/check/availability', [RoomApiController::class, 'checkRoomAvailability']);
-
-    });
-
+// Public Room Routes (v1)
+Route::prefix('v1/rooms')->group(function () {
+    Route::get('/', 'App\Http\Controllers\Api\RoomApiController@getAllRooms');
+    Route::get('/{id}', 'App\Http\Controllers\Api\RoomApiController@getRoomDetails');
+    Route::get('/search/available', 'App\Http\Controllers\Api\RoomApiController@searchRooms');
+    Route::get('/search/details/{id}', 'App\Http\Controllers\Api\RoomApiController@getSearchRoomDetails');
+    Route::get('/check/availability', 'App\Http\Controllers\Api\RoomApiController@checkRoomAvailability');
 });
-
