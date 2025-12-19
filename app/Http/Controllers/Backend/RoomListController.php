@@ -21,38 +21,42 @@ class RoomListController extends Controller
     {
         // Get current date for filtering active bookings
         $today = date('Y-m-d');
-        
+
         // Get all room numbers with their bookings using eager loading for better performance
         $room_number_list = RoomNumber::with([
             'room_type:id,name'
-        ])->get()->map(function($room_number) use ($today) {
+        ])->get()->map(function ($room_number) use ($today) {
             // Get current active booking (check-in <= today AND check-out >= today)
             $current_booking = BookingRoomList::where('room_number_id', $room_number->id)
-                ->whereHas('booking', function($query) use ($today) {
+                ->whereHas('booking', function ($query) use ($today) {
                     $query->where('status', '!=', 0) // Exclude cancelled
-                          ->where('check_in', '<=', $today)
-                          ->where('check_out', '>=', $today);
+                        ->where('check_in', '<=', $today)
+                        ->where('check_out', '>=', $today);
                 })
-                ->with(['booking' => function($query) {
-                    $query->select('id', 'code', 'name', 'check_in', 'check_out', 'status', 'payment_status');
-                }])
+                ->with([
+                    'booking' => function ($query) {
+                        $query->select('id', 'code', 'name', 'check_in', 'check_out', 'status', 'payment_status');
+                    }
+                ])
                 ->first();
-            
+
             // Get upcoming bookings (check-in > today)
             $upcoming_bookings = BookingRoomList::where('room_number_id', $room_number->id)
-                ->whereHas('booking', function($query) use ($today) {
+                ->whereHas('booking', function ($query) use ($today) {
                     $query->where('status', '!=', 0)
-                          ->where('check_in', '>', $today);
+                        ->where('check_in', '>', $today);
                 })
-                ->with(['booking' => function($query) {
-                    $query->select('id', 'code', 'name', 'check_in', 'check_out', 'status', 'payment_status')
-                          ->orderBy('check_in', 'asc');
-                }])
+                ->with([
+                    'booking' => function ($query) {
+                        $query->select('id', 'code', 'name', 'check_in', 'check_out', 'status', 'payment_status')
+                            ->orderBy('check_in', 'asc');
+                    }
+                ])
                 ->get();
-            
+
             // Add dynamic properties using setAttribute
             if ($current_booking && $current_booking->booking) {
-                $room_number->setAttribute('current_booking', (object)[
+                $room_number->setAttribute('current_booking', (object) [
                     'booking_id' => $current_booking->booking->id,
                     'booking_no' => $current_booking->booking->code,
                     'customer_name' => $current_booking->booking->name,
@@ -64,10 +68,10 @@ class RoomListController extends Controller
             } else {
                 $room_number->setAttribute('current_booking', null);
             }
-            
+
             $room_number->setAttribute('upcoming_bookings', $upcoming_bookings);
             $room_number->setAttribute('is_available', $current_booking === null);
-            
+
             return $room_number;
         });
 
@@ -80,10 +84,10 @@ class RoomListController extends Controller
     public function AddRoomList()
     {
         // Get room types with their associated rooms
-        $roomtype = RoomType::with('room')->get()->filter(function($item) {
+        $roomtype = RoomType::with('room')->get()->filter(function ($item) {
             return $item->room !== null;
         });
-        
+
         return view('backend.allroom.roomlist.add_roomlist', compact('roomtype'));
     }
 
@@ -109,7 +113,7 @@ class RoomListController extends Controller
 
         // Get room information
         $room = Room::findOrFail($validated['room_id']);
-        
+
         // Calculate total nights
         $check_in = new \DateTime($validated['check_in']);
         $check_out = new \DateTime($validated['check_out']);
@@ -190,10 +194,10 @@ class RoomListController extends Controller
             ->join('bookings', 'booking_room_lists.booking_id', '=', 'bookings.id')
             ->where('booking_room_lists.room_id', $room_id)
             ->where('bookings.status', '!=', 0) // Exclude cancelled bookings
-            ->where(function($query) use ($check_in, $check_out) {
+            ->where(function ($query) use ($check_in, $check_out) {
                 // Proper date overlap logic: bookings overlap if check_in < new_check_out AND check_out > new_check_in
                 $query->where('bookings.check_in', '<', $check_out)
-                      ->where('bookings.check_out', '>', $check_in);
+                    ->where('bookings.check_out', '>', $check_in);
             })
             ->distinct()
             ->pluck('booking_room_lists.room_number_id')

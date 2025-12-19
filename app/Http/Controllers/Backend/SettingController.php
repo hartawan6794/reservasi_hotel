@@ -28,7 +28,20 @@ class SettingController extends Controller
                 'facebook' => null,
                 'twitter' => null,
                 'copyright' => null,
+                'primary_color' => '#B56952',
+                'secondary_color' => '#C890FF',
+                'accent_color' => '#EE786C',
+                'text_color' => '#292323',
+                'link_color' => '#B56952',
             ]);
+        } else {
+            // Set default colors if not set
+            if (!$site->primary_color) $site->primary_color = '#B56952';
+            if (!$site->secondary_color) $site->secondary_color = '#C890FF';
+            if (!$site->accent_color) $site->accent_color = '#EE786C';
+            if (!$site->text_color) $site->text_color = '#292323';
+            if (!$site->link_color) $site->link_color = '#B56952';
+            $site->save();
         }
         
         return view('backend.site.site_update', compact('site'));
@@ -147,6 +160,74 @@ class SettingController extends Controller
 
         $notification = array(
             'message' => 'SMTP Setting Updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+    }
+
+    /**
+     * Display color setting page (Backend)
+     */
+    public function ColorSetting()
+    {
+        $site = SiteSetting::first();
+        
+        // If no site setting exists, create a default one
+        if (!$site) {
+            $site = SiteSetting::create([
+                'logo' => null,
+                'favicon' => null,
+                'phone' => null,
+                'address' => null,
+                'email' => null,
+                'facebook' => null,
+                'twitter' => null,
+                'copyright' => null,
+                'primary_color' => '#B56952',
+                'secondary_color' => '#C890FF',
+                'accent_color' => '#EE786C',
+                'text_color' => '#292323',
+                'link_color' => '#B56952',
+            ]);
+        } else {
+            // Set default colors if not set
+            if (!$site->primary_color) $site->primary_color = '#B56952';
+            if (!$site->secondary_color) $site->secondary_color = '#C890FF';
+            if (!$site->accent_color) $site->accent_color = '#EE786C';
+            if (!$site->text_color) $site->text_color = '#292323';
+            if (!$site->link_color) $site->link_color = '#B56952';
+            $site->save();
+        }
+        
+        return view('backend.setting.color_setting', compact('site'));
+    }
+
+    /**
+     * Update color setting (Backend)
+     */
+    public function ColorUpdate(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:site_settings,id',
+            'primary_color' => 'nullable|string|max:7|regex:/^#[a-fA-F0-9]{6}$/',
+            'secondary_color' => 'nullable|string|max:7|regex:/^#[a-fA-F0-9]{6}$/',
+            'accent_color' => 'nullable|string|max:7|regex:/^#[a-fA-F0-9]{6}$/',
+            'text_color' => 'nullable|string|max:7|regex:/^#[a-fA-F0-9]{6}$/',
+            'link_color' => 'nullable|string|max:7|regex:/^#[a-fA-F0-9]{6}$/',
+        ]);
+
+        $site = SiteSetting::findOrFail($request->id);
+
+        $site->primary_color = $request->primary_color ?? '#B56952';
+        $site->secondary_color = $request->secondary_color ?? '#C890FF';
+        $site->accent_color = $request->accent_color ?? '#EE786C';
+        $site->text_color = $request->text_color ?? '#292323';
+        $site->link_color = $request->link_color ?? '#B56952';
+        $site->save();
+
+        $notification = array(
+            'message' => 'Color Setting Updated Successfully',
             'alert-type' => 'success'
         );
 

@@ -215,6 +215,15 @@ Route::controller(\App\Http\Controllers\Backend\RoomReviewController::class)->gr
       
 });
 
+ /// Color Setting All Route 
+ Route::controller(SettingController::class)->group(function(){
+
+    Route::get('/color/setting', 'ColorSetting')->name('color.setting');
+    Route::post('/color/update', 'ColorUpdate')->name('color.update');
+    
+      
+});
+
  /// Gallery All Route 
  Route::controller(GalleryController::class)->group(function(){
 
@@ -397,6 +406,10 @@ Route::controller(BookingController::class)->group(function(){
    
  
 });
+
+
+require __DIR__.'/api.php';
+
 
 
 

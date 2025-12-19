@@ -41,6 +41,94 @@
             <link rel="icon" type="image/png" href="{{ asset('frontend/assets/img/favicon.png') }}">
         @endif
 
+        <!-- Dynamic Color Settings -->
+        <style>
+            :root {
+                --primary-color: {{ ($setting && $setting->primary_color) ? $setting->primary_color : '#B56952' }};
+                --secondary-color: {{ ($setting && $setting->secondary_color) ? $setting->secondary_color : '#C890FF' }};
+                --accent-color: {{ ($setting && $setting->accent_color) ? $setting->accent_color : '#EE786C' }};
+                --text-color: {{ ($setting && $setting->text_color) ? $setting->text_color : '#292323' }};
+                --link-color: {{ ($setting && $setting->link_color) ? $setting->link_color : '#B56952' }};
+            }
+
+            /* Apply Primary Color */
+            .btn-bg-one,
+            .default-btn.btn-bg-one {
+                background-color: var(--primary-color) !important;
+            }
+
+            .section-title span {
+                color: var(--primary-color) !important;
+            }
+
+            /* Apply Secondary Color */
+            .btn-bg-two {
+                background-color: var(--secondary-color) !important;
+            }
+
+            /* Apply Accent Color */
+            .btn-bg-three {
+                background-color: var(--accent-color) !important;
+            }
+
+            .sp-color {
+                color: var(--accent-color) !important;
+            }
+
+            /* Apply Text Color */
+            h1, h2, h3, h4, h5, h6 {
+                color: var(--text-color) !important;
+            }
+
+            .section-title h2 {
+                color: var(--text-color) !important;
+            }
+
+            /* Apply Link Color */
+            a {
+                color: var(--link-color);
+            }
+
+            a:hover {
+                color: var(--primary-color);
+            }
+
+            .article-content a {
+                color: var(--link-color) !important;
+            }
+
+            .article-content a:hover {
+                color: var(--primary-color) !important;
+            }
+
+            .article-content table thead {
+                background-color: var(--primary-color) !important;
+            }
+
+            .article-content blockquote {
+                border-left-color: var(--primary-color) !important;
+            }
+
+            /* Additional common elements */
+            .navbar-area .navbar .navbar-nav .nav-item .nav-link.active,
+            .navbar-area .navbar .navbar-nav .nav-item .nav-link:hover {
+                color: var(--primary-color) !important;
+            }
+
+            .top-header .top-header-left ul li a:hover {
+                color: var(--primary-color) !important;
+            }
+
+            .inner-banner .inner-title {
+                color: var(--text-color) !important;
+            }
+
+            /* Button hover effects */
+            .default-btn:hover {
+                background-color: var(--primary-color) !important;
+            }
+        </style>
+
         <!-- CKEditor Content Styles -->
         <style>
             /* CKEditor Content Styling */
