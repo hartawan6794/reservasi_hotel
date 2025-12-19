@@ -6,13 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use OpenApi\Annotations as OA;
 
 class UserController extends Controller
 {
+
+
     public function Index()
     {
         return view('frontend.index');
     }// End Method 
+
 
     public function UserProfile()
     {
@@ -130,6 +134,7 @@ class UserController extends Controller
         $setting = \App\Models\SiteSetting::find(1);
         return view('frontend.restaurant.restaurant', compact('setting'));
     }// End Method 
+
 
 
 }

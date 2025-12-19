@@ -17,6 +17,7 @@
         "stripe/stripe-php": "^10.15"
     },
     "require-dev": {
+        "darkaonline/l5-swagger": "^8.6",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^1.21",
         "laravel/pint": "^1.0",
