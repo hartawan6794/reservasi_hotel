@@ -129,6 +129,9 @@
 
                 <li> <a href="{{ route('site.setting') }}"><i class='bx bx-radio-circle'></i>Site Setting</a>
                 </li>
+
+                <li> <a href="{{ route('color.setting') }}"><i class='bx bx-radio-circle'></i>Pengaturan Warna</a>
+                </li>
                 
                  
             </ul>

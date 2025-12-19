@@ -9,19 +9,22 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function Index(){
+    public function Index()
+    {
         return view('frontend.index');
     }// End Method 
 
-    public function UserProfile(){
+    public function UserProfile()
+    {
 
         $id = Auth::user()->id;
         $profileData = User::find($id);
-        return view('frontend.dashboard.edit_profile',compact('profileData'));
+        return view('frontend.dashboard.edit_profile', compact('profileData'));
 
     }// End Method 
 
-    public function UserStore(Request $request){
+    public function UserStore(Request $request)
+    {
 
         $id = Auth::user()->id;
         $data = User::find($id);
@@ -30,11 +33,11 @@ class UserController extends Controller
         $data->phone = $request->phone;
         $data->address = $request->address;
 
-        if($request->file('photo')){
+        if ($request->file('photo')) {
             $file = $request->file('photo');
-            @unlink(public_path('upload/user_images/'.$data->photo));
-            $filename = date('YmdHi').$file->getClientOriginalName();  
-            $file->move(public_path('upload/user_images'),$filename);
+            @unlink(public_path('upload/user_images/' . $data->photo));
+            $filename = date('YmdHi') . $file->getClientOriginalName();
+            $file->move(public_path('upload/user_images'), $filename);
             $data['photo'] = $filename;
 
         }
@@ -50,7 +53,8 @@ class UserController extends Controller
     }// End Method 
 
 
-    public function UserLogout(Request $request){
+    public function UserLogout(Request $request)
+    {
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
@@ -66,14 +70,16 @@ class UserController extends Controller
     }// End Method
 
 
-    public function UserChangePassword(){
+    public function UserChangePassword()
+    {
 
         return view('frontend.dashboard.user_change_password');
 
     }// End Method
 
 
-    public function ChangePasswordStore(Request $request){
+    public function ChangePasswordStore(Request $request)
+    {
 
         // Validation 
         $request->validate([
@@ -81,13 +87,13 @@ class UserController extends Controller
             'new_password' => 'required|confirmed'
         ]);
 
-        if(!Hash::check($request->old_password, auth::user()->password)){
+        if (!Hash::check($request->old_password, auth::user()->password)) {
 
             $notification = array(
                 'message' => 'Old Password Does not Match!',
                 'alert-type' => 'error'
             );
-    
+
             return back()->with($notification);
 
         }
@@ -96,13 +102,13 @@ class UserController extends Controller
         User::whereId(auth::user()->id)->update([
             'password' => Hash::make($request->new_password)
         ]);
-        
+
         $notification = array(
             'message' => 'Password Change Successfully',
             'alert-type' => 'success'
         );
 
-        return back()->with($notification); 
+        return back()->with($notification);
 
     }// End Method 
 
@@ -127,4 +133,3 @@ class UserController extends Controller
 
 
 }
- 
